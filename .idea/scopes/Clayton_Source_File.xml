@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Clayton Source File" pattern="file[droidControl]:*.py" />
+</component>
