@@ -48,8 +48,8 @@ build cmake_object_order_depends_target_droidControl: phony || CMakeFiles/droidC
 
 build CMakeFiles/droidControl.dir/src/ocr.cpp.o: CXX_COMPILER__droidControl_Debug /Users/claytongearhart/Documents/Projects/droidControl/src/ocr.cpp || cmake_object_order_depends_target_droidControl
   DEP_FILE = CMakeFiles/droidControl.dir/src/ocr.cpp.o.d
-  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fcolor-diagnostics -std=gnu++14
-  INCLUDES = -I/Users/claytongearhart/Documents/Projects/droidControl/src -I/opt/homebrew/Cellar/opencv/4.7.0_4/include/opencv4
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fcolor-diagnostics -std=gnu++20
+  INCLUDES = -I/Users/claytongearhart/Documents/Projects/droidControl/src -I/opt/homebrew/Cellar/opencv/4.7.0_7/include/opencv4 -I/Users/claytongearhart/Documents/Projects/droidControl/./pInclude/eigen
   OBJECT_DIR = CMakeFiles/droidControl.dir
   OBJECT_FILE_DIR = CMakeFiles/droidControl.dir/src
 
@@ -63,6 +63,8 @@ build CMakeFiles/droidControl.dir/src/ocr.cpp.o: CXX_COMPILER__droidControl_Debu
 
 build droidControl: CXX_EXECUTABLE_LINKER__droidControl_Debug CMakeFiles/droidControl.dir/src/ocr.cpp.o
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk
+  LINK_LIBRARIES = -Wl,-rpath,/opt/homebrew/Cellar/opencv/4.7.0_7/lib  -lopencv_core  -lopencv_imgproc  -lopencv_video  -lopencv_imgcodecs  -lopencv_highgui
+  LINK_PATH = -L/opt/homebrew/Cellar/opencv/4.7.0_7/lib
   OBJECT_DIR = CMakeFiles/droidControl.dir
   POST_BUILD = :
   PRE_LINK = :

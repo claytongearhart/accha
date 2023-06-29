@@ -11,6 +11,8 @@
 		"commands" : 
 		[
 			"add_executable",
+			"target_link_directories",
+			"TARGET_LINK_LIBRARIES",
 			"include_directories",
 			"target_include_directories"
 		],
@@ -32,13 +34,31 @@
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 7,
+				"line" : 12,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 12,
+				"line" : 17,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 7,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 14,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 15,
 				"parent" : 0
 			}
 		]
@@ -52,18 +72,22 @@
 					"fragment" : "-g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fcolor-diagnostics"
 				},
 				{
-					"fragment" : "-std=gnu++14"
+					"fragment" : "-std=gnu++20"
 				}
 			],
 			"includes" : 
 			[
 				{
-					"backtrace" : 2,
+					"backtrace" : 4,
 					"path" : "/Users/claytongearhart/Documents/Projects/droidControl/src"
 				},
 				{
-					"backtrace" : 3,
-					"path" : "/opt/homebrew/Cellar/opencv/4.7.0_4/include/opencv4"
+					"backtrace" : 5,
+					"path" : "/opt/homebrew/Cellar/opencv/4.7.0_7/include/opencv4"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/Users/claytongearhart/Documents/Projects/droidControl/./pInclude/eigen"
 				}
 			],
 			"language" : "CXX",
@@ -73,7 +97,7 @@
 				[
 					1
 				],
-				"standard" : "14"
+				"standard" : "20"
 			},
 			"sourceIndexes" : 
 			[
@@ -93,6 +117,40 @@
 			{
 				"fragment" : "",
 				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-L/opt/homebrew/Cellar/opencv/4.7.0_7/lib",
+				"role" : "libraryPath"
+			},
+			{
+				"fragment" : "-Wl,-rpath,/opt/homebrew/Cellar/opencv/4.7.0_7/lib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-lopencv_core",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-lopencv_imgproc",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-lopencv_video",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-lopencv_imgcodecs",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-lopencv_highgui",
+				"role" : "libraries"
 			}
 		],
 		"language" : "CXX"
