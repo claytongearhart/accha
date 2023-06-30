@@ -103,7 +103,7 @@ int main() {
     cv::convexHull(blob, outerPoints);
 //boundingBox(outerPoints, 10)
     std::cout << fannedArea(outerPoints)  << '\n';
-    std::cout << boundingBox(outerPoints, 0).  << '\n';
+    std::cout << boundingBox(outerPoints, 0)  << '\n';
 
     for (auto&& point : outerPoints)
     {
