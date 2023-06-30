@@ -48,15 +48,15 @@ build cmake_object_order_depends_target_droidControl: phony || CMakeFiles/droidC
 
 build CMakeFiles/droidControl.dir/src/ocr.cpp.o: CXX_COMPILER__droidControl_Debug /Users/claytongearhart/Documents/Projects/droidControl/src/ocr.cpp || cmake_object_order_depends_target_droidControl
   DEP_FILE = CMakeFiles/droidControl.dir/src/ocr.cpp.o.d
-  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fcolor-diagnostics -std=gnu++20
-  INCLUDES = -I/Users/claytongearhart/Documents/Projects/droidControl/src -I/opt/homebrew/Cellar/opencv/4.7.0_7/include/opencv4 -I/opt/homebrew/Cellar/boost/1.82.0_1/include -I/Users/claytongearhart/Documents/Projects/droidControl/./pInclude/eigen
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fcolor-diagnostics   -w -std=gnu++20
+  INCLUDES = -I/Users/claytongearhart/Documents/Projects/droidControl/src -I/opt/homebrew/Cellar/opencv/4.7.0_7/include/opencv4 -I/opt/homebrew/Cellar/boost/1.82.0_1/include -I/Users/claytongearhart/Documents/Projects/droidControl/./pInclude/eigen -I/Users/claytongearhart/Documents/Projects/droidControl/include
   OBJECT_DIR = CMakeFiles/droidControl.dir
   OBJECT_FILE_DIR = CMakeFiles/droidControl.dir/src
 
 build CMakeFiles/droidControl.dir/src/minParallelogram.cpp.o: CXX_COMPILER__droidControl_Debug /Users/claytongearhart/Documents/Projects/droidControl/src/minParallelogram.cpp || cmake_object_order_depends_target_droidControl
   DEP_FILE = CMakeFiles/droidControl.dir/src/minParallelogram.cpp.o.d
-  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fcolor-diagnostics -std=gnu++20
-  INCLUDES = -I/Users/claytongearhart/Documents/Projects/droidControl/src -I/opt/homebrew/Cellar/opencv/4.7.0_7/include/opencv4 -I/opt/homebrew/Cellar/boost/1.82.0_1/include -I/Users/claytongearhart/Documents/Projects/droidControl/./pInclude/eigen
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk -fcolor-diagnostics   -w -std=gnu++20
+  INCLUDES = -I/Users/claytongearhart/Documents/Projects/droidControl/src -I/opt/homebrew/Cellar/opencv/4.7.0_7/include/opencv4 -I/opt/homebrew/Cellar/boost/1.82.0_1/include -I/Users/claytongearhart/Documents/Projects/droidControl/./pInclude/eigen -I/Users/claytongearhart/Documents/Projects/droidControl/include
   OBJECT_DIR = CMakeFiles/droidControl.dir
   OBJECT_FILE_DIR = CMakeFiles/droidControl.dir/src
 

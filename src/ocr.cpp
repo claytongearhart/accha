@@ -102,15 +102,40 @@ int main() {
     std::vector<cv::Point> outerPoints;
     cv::convexHull(blob, outerPoints);
 //boundingBox(outerPoints, 10)
-    std::cout << fannedArea(outerPoints)  << '\n';
-    std::cout << boundingBox(outerPoints, 0)  << '\n';
+	cv::RotatedRect rRect = cv::minAreaRect(outerPoints);
 
-    for (auto&& point : outerPoints)
-    {
-        cv::circle(srcImage, point, 5, cv::Scalar({255, 200, 128}), 2);
-    }
+	auto M = cv::getRotationMatrix2D(rRect.center, rRect.angle, 1);
 
-    cv::imshow("मैं नीना से प्यार करता हूँ", srcImage);
+	cv::Mat warpDst, cropped, eroded;
+	auto newSize = rRect.size;
+	newSize.height /= 1.1;
+  	auto rRectCenter = rRect.center;
+  	auto newSrcImgSize = srcImage.size();
+  	newSrcImgSize.width -= int(newSize.width * 0.35);
+  	rRectCenter.x += newSize.width * 0.15;
+  	newSize.width *= 0.65;
+
+	cv::warpAffine(srcImage, warpDst, M, newSrcImgSize);
+	cv::getRectSubPix(warpDst, newSize, rRectCenter, newIdk);
+
+	cv::Mat yellowMask, newIdk(cropped), inverseMask;
+	cv::inRange(newIdk, cv::Mat({10, 10, 10}), cv::Mat({255, 255, 255}), yellowMask);
+	newIdk.setTo(cv::Scalar({255,255,255}), yellowMask);
+	cv::inRange(newIdk, cv::Scalar({0,0,0}), cv::Scalar({250,250,250}), inverseMask);
+	cv::morphologyEx(inverseMask, eroded, cv::MORPH_DILATE, cv::getStructuringElement(cv::MORPH_CROSS, cv::Size(3,3)),
+					 cv::Point(-1, -1), 1);
+
+
+
+
+//	cv::Point2f rectPoints[4];
+//	rRect.points(rectPoints);
+//	for (unsigned int i = 0; i < 4; i++)
+//	{
+//	  cv::line(srcImage, rectPoints[i], rectPoints[(i+1) % 4], cv::Scalar({255, 200, 128}), 3);
+//	}
+
+    cv::imshow("मैं नीना से प्यार करता हूँ",  inverseMask);
     cv::waitKey(0);
     cv::destroyAllWindows();
 
