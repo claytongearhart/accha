@@ -115,10 +115,12 @@ int main() {
   	rRectCenter.x += newSize.width * 0.15;
   	newSize.width *= 0.65;
 
-	cv::warpAffine(srcImage, warpDst, M, newSrcImgSize);
+	cv::Mat yellowMask, newIdk(cropped), inverseMask;
+
+
+  	cv::warpAffine(srcImage, warpDst, M, newSrcImgSize);
 	cv::getRectSubPix(warpDst, newSize, rRectCenter, newIdk);
 
-	cv::Mat yellowMask, newIdk(cropped), inverseMask;
 	cv::inRange(newIdk, cv::Mat({10, 10, 10}), cv::Mat({255, 255, 255}), yellowMask);
 	newIdk.setTo(cv::Scalar({255,255,255}), yellowMask);
 	cv::inRange(newIdk, cv::Scalar({0,0,0}), cv::Scalar({250,250,250}), inverseMask);
