@@ -39,13 +39,13 @@ if __name__ == '__main__':
     device.shell(f"rm {mostRecentImagePath}")
 
     # OCR
-    mostRecentImage = cv.imread('./mostRecent.jpg')
-    imgray = cv.cvtColor(mostRecentImage, cv.COLOR_BGR2GRAY)
-    ret, thresh = cv.threshold(imgray, 127, 255, 0)
-    contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-    cv.drawContours(mostRecentImage, contours, -1, (0, 255, 0), 3)
-    cv.imshow("", mostRecentImage)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
-
-    print(pytesseract.image_to_data(Image.open('./mostRecent.jpg')))
+    # mostRecentImage = cv.imread('./mostRecent.jpg')
+    # imgray = cv.cvtColor(mostRecentImage, cv.COLOR_BGR2GRAY)
+    # ret, thresh = cv.threshold(imgray, 127, 255, 0)
+    # contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    # cv.drawContours(mostRecentImage, contours, -1, (0, 255, 0), 3)
+    # cv.imshow("", mostRecentImage)
+    # cv.waitKey(0)
+    # cv.destroyAllWindows()
+    #
+    # print(pytesseract.image_to_data(Image.open('./mostRecent.jpg')))

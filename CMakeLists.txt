@@ -8,7 +8,7 @@ include_directories(src)
 
 add_executable(droidControl
         src/ocr.cpp
-        src/ocr.h src/minParallelogram.cpp src/minParallelogram.h)
+        src/ocr.h src/phyControl.cxx src/phyControl.hxx src/processImg.cxx src/processImg.hxx)
 target_link_directories(droidControl PUBLIC  /opt/homebrew/Cellar/opencv/4.7.0_7/lib/ /opt/homebrew/Cellar/boost/1.82.0_1/lib )
 
 target_include_directories(droidControl PUBLIC  /opt/homebrew/Cellar/opencv/4.7.0_7/include/opencv4 /opt/homebrew/Cellar/boost/1.82.0_1/include)
