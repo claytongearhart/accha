@@ -1,0 +1,6 @@
+media/*
+rawData/*
+*.out
+cmake-build-debug
+test.cxx
+

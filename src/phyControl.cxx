@@ -27,7 +27,7 @@ std::string exec(const char* cmd) {
   return result;
 }
 
-void adb::seekCards(const std::function<void(void)>& vo) {
+void adb::seekCards(const std::function<void(void)>& vo, const std::function<void(void)>& otherFunc) {
   double mean, sq_sum, stdev;
   std::string currVal;
   while (getline(&logcatLine, &lcLen, fp) != -1) {
@@ -38,11 +38,14 @@ void adb::seekCards(const std::function<void(void)>& vo) {
 	  currVal.erase(std::remove_if(currVal.begin(), currVal.end(), isspace));
 	  if (currVal == "vo")
 	  {
-		vo();
+		std::this_thread::sleep_for(128ms);
+
+		otherFunc();
 		return;
 	  }
 	  else if (currVal == "yah")
 	  {
+		std::this_thread::sleep_for(128ms);
 		return;
 	  }
 	  if (lumValues.size() >= 1000) {
@@ -61,7 +64,7 @@ void adb::seekCards(const std::function<void(void)>& vo) {
 
 
 		if (lumValues.size() > 100 & (dCurrVal < mean - stdev || dCurrVal > mean + stdev)) {
-		  return;
+		  vo();
 		}
 	  }
 	}

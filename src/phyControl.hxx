@@ -11,6 +11,8 @@
 #include <cstdio>
 #include <iostream>
 #include <memory>
+#include <chrono>
+#include <thread>
 #include <stdexcept>
 #include <string>
 #include <array>
@@ -28,6 +30,8 @@
 #include <termios.h>
 #include <fstream>
 #include <vector>
+
+using namespace std::chrono_literals; // ns, us, ms, s, h, etc.
 
 class arduino {
  private:
@@ -84,11 +88,11 @@ class adb {
 	fp = popen("adb logcat -s CameraXApp", "r");
   }
 
-  void seekCards(const std::function<void(void)>& vo);
+  void seekCards(const std::function<void(void)> &vo, const std::function<void(void)> &otherFunc);
 
   static void pullFile(const std::string &srcName, const std::string &dstName = "image.jpg") {
 	std::system(std::string("adb pull " + srcName + " " + dstName).c_str());
-	std::system(std::string("adb shell rm " + srcName ).c_str());
+	std::system(std::string("adb shell rm " + srcName).c_str());
   }
 
   void takePicture() const { clickButton(true); }
