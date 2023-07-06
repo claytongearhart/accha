@@ -3,4 +3,4 @@ rawData/*
 *.out
 cmake-build-debug
 test.cxx
-
+.idea
