@@ -1,3 +1,0 @@
-/Users/claytongearhart/Documents/Projects/droidControl/cmake-build-debug/CMakeFiles/droidControl.dir
-/Users/claytongearhart/Documents/Projects/droidControl/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/claytongearhart/Documents/Projects/droidControl/cmake-build-debug/CMakeFiles/rebuild_cache.dir
