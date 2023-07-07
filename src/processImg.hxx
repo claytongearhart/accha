@@ -20,14 +20,14 @@
 #include <iostream>
 
 
-typedef unsigned int cord_t;
-typedef unsigned int cord2_t;
-typedef float area_t;
+typedef unsigned int CordT;
+typedef unsigned int Cord2T;
+typedef float AreaT;
 
 struct point
 {
-  cord_t x;
-  cord_t y;
+  CordT x;
+  CordT y;
 
   bool operator <(const point &p) const
   {
@@ -42,10 +42,10 @@ constexpr long double operator ""_rad(long double);
 // 3D cross product of OA and OB vectors, (i.e z-component of their "2D" cross product, but remember that it is not defined in "2D").
 // Returns a positive value, if OAB makes a counter-clockwise turn,
 // negative for clockwise turn, and zero if the points are collinear.
-cord2_t zCrossProd(const cv::Point &O, const cv::Point &A, const cv::Point &B);
+Cord2T zCrossProd(const cv::Point &O, const cv::Point &A, const cv::Point &B);
 
 std::vector<cv::Point> monotoneChain(std::vector<cv::Point> P);
 
-cv::Rect boundingBox(std::vector<cv::Point> &points, float angle);
+cv::Rect boundingBox(std::vector<cv::Point> &Points, float Angle);
 
 #endif //DROIDCONTROL_SRC_PROCESSIMG_HXX_

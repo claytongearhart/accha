@@ -4,4 +4,7 @@
 #pragma once
 
 #include "phyControl.hxx"
+#include <signal.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "processImg.hxx"

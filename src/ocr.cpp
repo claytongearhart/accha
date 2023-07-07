@@ -4,26 +4,34 @@
 
 #include "ocr.h"
 
-int main() {
+int
+main()
+{
 
-  adb newAdb;
-  arduino ardControl;
-	ardControl.startMotor();
-  while (true) {
-	std::cout << "vez\n";
-	newAdb.takePicture();
-	newAdb.seekCards([&]() {
-	  ardControl.stopMotor();
-	  newAdb.flashPicture();
+	Adb NewAdb;
+	arduino ArdControl;
+	ArdControl.startMotor();
+	while (true)
+	{
+		std::cout << "vez\n";
+		NewAdb.seekCards([&]()
+						 {
+							 std::cout << "stopping motor and taking picture without flash\n";
+							  ArdControl.stopMotor();
+							 NewAdb.takePicture();
+;
 
-	}, []() {
-	  adb::pullFile("/sdcard/Pictures/CameraX-Image/vo.jpg",
-					"./media/noFlash");
-	});
-
-	adb::pullFile("/sdcard/Pictures/CameraX-Image/yah.jpg", "./media/withFlash.jpg");
-	ardControl.startMotor();
-  }
+						 }, [&]()
+						 {
+							std::cout << "retrieving vo image and taking picture with flash\n";
+							 Adb::pullFile("/sdcard/Pictures/CameraX-Image/vo.jpg",
+							               "./media/noFlash");
+							  NewAdb.flashPicture();
+						 });
+		std::cout << "pulling yah image and starting motor\n";
+//		adb::pullFile("/sdcard/Pictures/CameraX-Image/yah.jpg", "./media/withFlash.jpg");
+//		ardControl.startMotor();
+	}
 
 //	arduino ardControl;
 //	std::string input;
@@ -35,5 +43,5 @@ int main() {
 //	  else if (input == "q") break;
 //	}
 
-  return 0;
+	return 0;
 }

@@ -12,73 +12,73 @@ long double operator ""_deg(long double deg) {
 };
 
 constexpr long double operator ""_rad(long double rad) {
-  long double radians = (180 * rad) / std::numbers::pi_v<long double>;
-  return radians;
+  long double Radians = (180 * rad) / std::numbers::pi_v<long double>;
+  return Radians;
 };
 
-cord2_t zCrossProd(const cv::Point &O, const cv::Point &A, const cv::Point &B) {
+Cord2T zCrossProd(const cv::Point &O, const cv::Point &A, const cv::Point &B) {
   return (A.x - O.x) * (B.y - O.y) - (A.y - O.y) * (B.x - O.x);
 };
 
 std::vector<cv::Point> monotoneChain(std::vector<cv::Point> P) {
-  size_t n = P.size(), k = 0;
-  if (n <= 3) return P;
-  std::vector<cv::Point> H(2 * n);
+  size_t N = P.size(), K = 0;
+  if (N <= 3) return P;
+  std::vector<cv::Point> H(2 * N);
 
   struct {
 	bool operator()(const cv::Point a, const cv::Point b) const { return a.x < b.x; }
-  } customLess;
+  } CustomLess;
 
 // Sort points lexicographically
-  std::sort(P.begin(), P.end(), customLess);
+  std::sort(P.begin(), P.end(), CustomLess);
 
 // Build lower hull
-  for (size_t i = 0; i < n; ++i) {
-	while (k >= 2 && zCrossProd(H[k - 2], H[k - 1], P[i]) <= 0) k--;
-	H[k++] = P[i];
+  for (size_t i = 0; i < N; ++i) {
+	while (K >= 2 && zCrossProd(H[K - 2], H[K - 1], P[i]) <= 0) K--;
+	H[K++] = P[i];
   }
 
 // Build upper hull
-  for (size_t i = n - 1, t = k + 1; i > 0; --i) {
-	while (k >= t && zCrossProd(H[k - 2], H[k - 1], P[i - 1]) <= 0) k--;
-	H[k++] = P[i - 1];
+  for (size_t i = N - 1, t = K + 1; i > 0; --i) {
+	while (K >= t && zCrossProd(H[K - 2], H[K - 1], P[i - 1]) <= 0) K--;
+	H[K++] = P[i - 1];
   }
 
-  H.resize(k - 1);
+  H.resize(K - 1);
   return H;
 };
 
-area_t fannedArea(std::vector<cv::Point> points) {
-  area_t currArea = 0;
+AreaT fannedArea(std::vector<cv::Point> points) {
+  AreaT CurrArea = 0;
 
   for (unsigned short i = 0; i < points.size() - 1; i++) {
-	Eigen::Matrix<int, 3, 3> matrix{
+	Eigen::Matrix<int, 3, 3> Matrix{
 		{points[0].x, points[i + 1].x, points[i + 2].x},
 		{points[0].y, points[i + 1].y, points[i + 2].y},
 		{1, 1, 1}
 	};
 
-	currArea += abs(float(matrix.determinant()));
+    CurrArea += abs(float(Matrix.determinant()));
   }
 
-  return currArea;
+  return CurrArea;
 }
 
-cv::Rect boundingBox(std::vector<cv::Point> &points, float angle) {
-  float sinTheta = sin(angle);
-  float cosTheta = cos(angle);
-  std::vector<cv::Point> newPoints;
+cv::Rect boundingBox(std::vector<cv::Point> &Points, float Angle) {
+  float SinTheta = sin(Angle);
+  float CosTheta = cos(Angle);
+  std::vector<cv::Point> NewPoints;
 
-  for (auto &&point : points) {
+  for (auto &&point : Points) {
 	// Use the following rotation matrix: \begin{bmatrix}
 	//\cos \theta & -\sin \theta \\
         //\sin \theta & \cos \theta
 	//\end{bmatrix}
-	newPoints.emplace_back(cv::Point(int(point.x * cosTheta - point.y * sinTheta),
-									 int(point.x * sinTheta - point.y * cosTheta)));
+	NewPoints.emplace_back(cv::Point(int(point.x * CosTheta - point.y * SinTheta),
+	                                 int(point.x * SinTheta - point.y * CosTheta)));
   }
 
-  return cv::boundingRect(newPoints);
+  return cv::boundingRect(NewPoints);
 }
 
 void processImg()
@@ -93,45 +93,45 @@ void processImg()
   std::vector<std::vector<cv::Point>> contours;
   cv::findContours(mask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_TC89_KCOS);
 
-  auto blob = *std::max_element(contours.begin(), contours.end(),
-								[](std::vector<cv::Point> a, std::vector<cv::Point> b) {
+  auto Blob = *std::max_element(contours.begin(), contours.end(),
+                                [](std::vector<cv::Point> a, std::vector<cv::Point> b) {
 								  return cv::contourArea(a) < cv::contourArea(b);
 								});
 
-  std::vector<cv::Point> outerPoints;
-  cv::convexHull(blob, outerPoints);
+  std::vector<cv::Point> OuterPoints;
+  cv::convexHull(Blob, OuterPoints);
 //boundingBox(outerPoints, 10)
-  cv::RotatedRect rRect = cv::minAreaRect(outerPoints);
+  cv::RotatedRect RRect = cv::minAreaRect(OuterPoints);
 
-  auto M = cv::getRotationMatrix2D(rRect.center, rRect.angle, 1);
+  auto M = cv::getRotationMatrix2D(RRect.center, RRect.angle, 1);
 
-  cv::Mat warpDst, cropped, eroded;
-  auto newSize = rRect.size;
-  newSize.height /= 1.1;
-  auto rRectCenter = rRect.center;
-  auto newSrcImgSize = srcImage.size();
-  newSrcImgSize.width -= int(newSize.width * 0.35);
-  rRectCenter.x += newSize.width * 0.15;
-  newSize.width *= 0.65;
+  cv::Mat WarpDst, Cropped, Eroded;
+  auto NewSize = RRect.size;
+  NewSize.height /= 1.1;
+  auto RRectCenter = RRect.center;
+  auto NewSrcImgSize = srcImage.size();
+  NewSrcImgSize.width -= int(NewSize.width * 0.35);
+  RRectCenter.x += NewSize.width * 0.15;
+  NewSize.width *= 0.65;
 
-  cv::warpAffine(srcImage, warpDst, M, newSrcImgSize);
-  cv::getRectSubPix(warpDst, newSize, rRectCenter, cropped);
+  cv::warpAffine(srcImage, WarpDst, M, NewSrcImgSize);
+  cv::getRectSubPix(WarpDst, NewSize, RRectCenter, Cropped);
 
   ////  cv::morphologyEx(inverseMask, eroded, cv::MORPH_DILATE, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3,
 ////																												3)),
 ////				   cv::Point(-1, -1), 1);
 
 
-  cv::Mat acetylcholine, androstadienone, estratetraenol, dendriticAborization, monozygotic;
-  cv::inRange(cropped, cv::Scalar({0, 0, 0}), cv::Scalar({64, 32, 32}), acetylcholine);
-  cv::inRange(cropped, cv::Scalar({16, 16, 16}), cv::Scalar({100, 100, 100}), dendriticAborization);
+  cv::Mat Acetylcholine, Androstadienone, Estratetraenol, DendriticAborization, Monozygotic;
+  cv::inRange(Cropped, cv::Scalar({0, 0, 0}), cv::Scalar({64, 32, 32}), Acetylcholine);
+  cv::inRange(Cropped, cv::Scalar({16, 16, 16}), cv::Scalar({100, 100, 100}), DendriticAborization);
 
-  auto structEle = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3, 3));
-  cv::morphologyEx(dendriticAborization, estratetraenol, cv::MORPH_CLOSE, structEle, cv::Point(-1, -1), 1);
+  auto StructEle = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3, 3));
+  cv::morphologyEx(DendriticAborization, Estratetraenol, cv::MORPH_CLOSE, StructEle, cv::Point(-1, -1), 1);
 
-  cv::blur(estratetraenol, androstadienone, cv::Size(1, 1));
+  cv::blur(Estratetraenol, Androstadienone, cv::Size(1, 1));
 
-  cv::subtract(androstadienone, acetylcholine, monozygotic);
+  cv::subtract(Androstadienone, Acetylcholine, Monozygotic);
 
-  cv::imwrite("test.jpg", cropped);
+  cv::imwrite("test.jpg", Cropped);
 }
