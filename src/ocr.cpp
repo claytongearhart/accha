@@ -4,44 +4,70 @@
 
 #include "ocr.h"
 
-int
-main()
-{
+void
+repl() {
+  arduino ArdControl;
+  Adb NewAdb;
+  std::string Input;
+  while (true) {
+	std::cin >> Input;
+	if (Input=="start") {
+	  ArdControl.startMotor();
 
-	Adb NewAdb;
-	arduino ArdControl;
-	ArdControl.startMotor();
-	while (true)
+	} else if (Input=="stop")
+	  ArdControl.stopMotor();
+	else if(Input=="pic")
 	{
-		std::cout << "vez\n";
-		NewAdb.seekCards([&]()
-						 {
-							 std::cout << "stopping motor and taking picture without flash\n";
-							  ArdControl.stopMotor();
-							 NewAdb.takePicture();
-;
+	  Adb::takePicture();
+	  NewAdb.seekCards([]() {}, [&]() {
+		Adb::pullFile("/sdcard/Pictures/CameraX-Image/vo.jpg",
+		              "./media/noFlash.jpg");
+		Adb::flashPicture();
+	  }, []() {
+		std::cout << "pulling yah image \n";
+		Adb::pullFile("/sdcard/Pictures/CameraX-Image/yah.jpg", "./media/withFlash.jpg");
 
-						 }, [&]()
-						 {
-							std::cout << "retrieving vo image and taking picture with flash\n";
-							 Adb::pullFile("/sdcard/Pictures/CameraX-Image/vo.jpg",
-							               "./media/noFlash");
-							  NewAdb.flashPicture();
-						 });
-		std::cout << "pulling yah image and starting motor\n";
-//		adb::pullFile("/sdcard/Pictures/CameraX-Image/yah.jpg", "./media/withFlash.jpg");
-//		ardControl.startMotor();
+	  });
 	}
+	else if (Input == "proc")
+	{
+	  processImg();
+	}
+	else if (Input=="q")
+	  break;
+  }
+}
 
-//	arduino ardControl;
-//	std::string input;
-//	while (true)
-//	{
-//	  std::cin >> input;
-//	  if (input == "start") ardControl.startMotor();
-//	  else if (input == "stop") ardControl.stopMotor();
-//	  else if (input == "q") break;
-//	}
+int
+main() {
+//
+//  Adb NewAdb;
+//  arduino ArdControl;
+//  ArdControl.startMotor();
+//  while (true) {
+////    std::cout << "vez\n";
+////    NewAdb.seekCards([&]() {
+////	  std::cout << "stopping motor and taking picture without flash\n";
+////	  ArdControl.stopMotor();
+////	  Adb::takePicture();
+////
+////    }, [&]() {
+////	  std::cout << "retrieving vo image and taking picture with flash\n";
+////	  Adb::pullFile("/sdcard/Pictures/CameraX-Image/vo.jpg",
+////	                "./media/noFlash");
+////	  Adb::flashPicture();
+////    }, []() {
+////	  std::cout << "pulling yah image \n";
+////
+////	  Adb::pullFile("/sdcard/Pictures/CameraX-Image/yah.jpg", "./media/withFlash.jpg");
+////    });
+////    std::cout << "starting motor\n";
+////    ArdControl.startMotor();
+////    std::this_thread::sleep_for(256ms);
+//  }
 
-	return 0;
+  repl();
+
+  return 0;
+
 }

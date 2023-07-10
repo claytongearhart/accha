@@ -47,5 +47,6 @@ Cord2T zCrossProd(const cv::Point &O, const cv::Point &A, const cv::Point &B);
 std::vector<cv::Point> monotoneChain(std::vector<cv::Point> P);
 
 cv::Rect boundingBox(std::vector<cv::Point> &Points, float Angle);
+void processImg();
 
 #endif //DROIDCONTROL_SRC_PROCESSIMG_HXX_

@@ -83,17 +83,24 @@ cv::Rect boundingBox(std::vector<cv::Point> &Points, float Angle) {
 
 void processImg()
 {
-  cv::Mat srcImage = cv::imread("./mostRecent.jpg");
+  cv::Mat NfSrc = cv::imread("./media/noFlash.jpg");
+  cv::Mat FSrc = cv::imread("./media/withFlash.jpg");
   cv::Mat srcHSV, hsvBlurred, mask;
 
-  cv::cvtColor(srcImage, srcHSV, cv::COLOR_BGR2HSV);
-  cv::blur(srcHSV, hsvBlurred, cv::Size(5, 5));
+  if ((NfSrc.size().height / NfSrc.size().width) <= 1)
+  {
+	cv::rotate(NfSrc, NfSrc, cv::ROTATE_90_CLOCKWISE);
+    cv::rotate(FSrc, FSrc, cv::ROTATE_90_CLOCKWISE);
+  }
+
+  cv::cvtColor(NfSrc, srcHSV, cv::COLOR_BGR2HSV);
+  cv::blur(srcHSV, hsvBlurred, cv::Size(1, 1));
   cv::inRange(hsvBlurred, cv::Mat({20, 110, 120}), cv::Mat({30, 242, 255}), mask);
 
-  std::vector<std::vector<cv::Point>> contours;
-  cv::findContours(mask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_TC89_KCOS);
+  std::vector<std::vector<cv::Point>> Contours;
+  cv::findContours(mask, Contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_TC89_KCOS);
 
-  auto Blob = *std::max_element(contours.begin(), contours.end(),
+  auto Blob = *std::max_element(Contours.begin(), Contours.end(),
                                 [](std::vector<cv::Point> a, std::vector<cv::Point> b) {
 								  return cv::contourArea(a) < cv::contourArea(b);
 								});
@@ -105,17 +112,20 @@ void processImg()
 
   auto M = cv::getRotationMatrix2D(RRect.center, RRect.angle, 1);
 
-  cv::Mat WarpDst, Cropped, Eroded;
+  cv::Mat NfWrapped, NfCropped, FCropped, Eroded, FWrapped;
   auto NewSize = RRect.size;
   NewSize.height /= 1.1;
   auto RRectCenter = RRect.center;
-  auto NewSrcImgSize = srcImage.size();
+  auto NewSrcImgSize = NfSrc.size();
   NewSrcImgSize.width -= int(NewSize.width * 0.35);
   RRectCenter.x += NewSize.width * 0.15;
   NewSize.width *= 0.65;
 
-  cv::warpAffine(srcImage, WarpDst, M, NewSrcImgSize);
-  cv::getRectSubPix(WarpDst, NewSize, RRectCenter, Cropped);
+  cv::warpAffine(NfSrc, NfWrapped, M, NewSrcImgSize);
+  cv::getRectSubPix(NfWrapped, NewSize, RRectCenter, NfCropped);
+
+  cv::warpAffine(FSrc, FWrapped, M, NewSrcImgSize);
+  cv::getRectSubPix(FWrapped, NewSize, RRectCenter, FCropped);
 
   ////  cv::morphologyEx(inverseMask, eroded, cv::MORPH_DILATE, cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3,
 ////																												3)),
@@ -123,15 +133,15 @@ void processImg()
 
 
   cv::Mat Acetylcholine, Androstadienone, Estratetraenol, DendriticAborization, Monozygotic;
-  cv::inRange(Cropped, cv::Scalar({0, 0, 0}), cv::Scalar({64, 32, 32}), Acetylcholine);
-  cv::inRange(Cropped, cv::Scalar({16, 16, 16}), cv::Scalar({100, 100, 100}), DendriticAborization);
+//  cv::inRange(Cropped, cv::Scalar({0, 0, 0}), cv::Scalar({64, 32, 32}), Acetylcholine);
+//  cv::inRange(Cropped, cv::Scalar({16, 16, 16}), cv::Scalar({100, 100, 100}), DendriticAborization);
+//
+//  auto StructEle = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3, 3));
+//  cv::morphologyEx(DendriticAborization, Estratetraenol, cv::MORPH_CLOSE, StructEle, cv::Point(-1, -1), 1);
+//
+//  cv::blur(Estratetraenol, Androstadienone, cv::Size(1, 1));
+//
+  cv::subtract(FCropped, NfCropped, Monozygotic);
 
-  auto StructEle = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3, 3));
-  cv::morphologyEx(DendriticAborization, Estratetraenol, cv::MORPH_CLOSE, StructEle, cv::Point(-1, -1), 1);
-
-  cv::blur(Estratetraenol, Androstadienone, cv::Size(1, 1));
-
-  cv::subtract(Androstadienone, Acetylcholine, Monozygotic);
-
-  cv::imwrite("test.jpg", Cropped);
+  cv::imwrite("test.jpg", Monozygotic);
 }

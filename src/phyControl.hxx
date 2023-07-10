@@ -72,20 +72,21 @@ class arduino
 
 class Adb
 {
-	bool isOverNoFlash;
+	bool cardLeftView;
 	std::deque<double> lumValues;
 	FILE* fp;
 	char* logcatLine = nullptr;
 	size_t lcLen;
 
  public:
-	Adb() : isOverNoFlash(false), lumValues(), lcLen(0)
+	Adb() : cardLeftView(true), lumValues(), lcLen(0)
 	{
 		fp = popen("adb logcat -s CameraXApp", "r");
 	}
 
 	void
-	seekCards(const std::function<void(void)>& OnCard, const std::function<void(void)>& OnVoSave);
+	seekCards(const std::function<void(void)>& OnCard, const std::function<void(void)>& OnVoSave,
+			  const std::function<void(void)> &OnYahSave);
 
 	static void
 	pullFile(const std::string& SrcName, const std::string& DstName = "image.jpg");
@@ -95,8 +96,6 @@ class Adb
 	static void
 	flashPicture();
 
-	static void
-	clickButton(bool OverPicture);
 
  private:
 
