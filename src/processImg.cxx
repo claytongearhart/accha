@@ -74,8 +74,8 @@ cv::Rect boundingBox(std::vector<cv::Point> &Points, float Angle) {
 	//\cos \theta & -\sin \theta \\
         //\sin \theta & \cos \theta
 	//\end{bmatrix}
-	NewPoints.emplace_back(cv::Point(int(point.x * CosTheta - point.y * SinTheta),
-	                                 int(point.x * SinTheta - point.y * CosTheta)));
+	NewPoints.emplace_back(int(point.x * CosTheta - point.y * SinTheta),
+	                                 int(point.x * SinTheta - point.y * CosTheta));
   }
 
   return cv::boundingRect(NewPoints);
@@ -86,15 +86,17 @@ void processImg()
   cv::Mat NfSrc = cv::imread("./media/noFlash.jpg");
   cv::Mat FSrc = cv::imread("./media/withFlash.jpg");
   cv::Mat srcHSV, hsvBlurred, mask;
+//  cv::Mat NfSrc, FSrc;
 
-  if ((NfSrc.size().height / NfSrc.size().width) <= 1)
+  if ((NfSrc.size().height / NfSrc.size().width) >= 1)
   {
+	std::cout << "gsdf\n";
 	cv::rotate(NfSrc, NfSrc, cv::ROTATE_90_CLOCKWISE);
     cv::rotate(FSrc, FSrc, cv::ROTATE_90_CLOCKWISE);
   }
 
   cv::cvtColor(NfSrc, srcHSV, cv::COLOR_BGR2HSV);
-  cv::blur(srcHSV, hsvBlurred, cv::Size(1, 1));
+  cv::blur(srcHSV, hsvBlurred, cv::Size(4, 4));
   cv::inRange(hsvBlurred, cv::Mat({20, 110, 120}), cv::Mat({30, 242, 255}), mask);
 
   std::vector<std::vector<cv::Point>> Contours;
@@ -109,17 +111,22 @@ void processImg()
   cv::convexHull(Blob, OuterPoints);
 //boundingBox(outerPoints, 10)
   cv::RotatedRect RRect = cv::minAreaRect(OuterPoints);
+  if (RRect.size.height > RRect.size.width)
+  {
+	RRect = cv::RotatedRect(RRect.center, cv::Size(RRect.size.height, RRect.size.width),RRect.angle - 90);
+  }
 
-  auto M = cv::getRotationMatrix2D(RRect.center, RRect.angle, 1);
+  auto M = cv::getRotationMatrix2D(RRect.center,  RRect.angle, 1);
 
   cv::Mat NfWrapped, NfCropped, FCropped, Eroded, FWrapped;
   auto NewSize = RRect.size;
+  std::cout << NewSize <<'\n';
   NewSize.height /= 1.1;
   auto RRectCenter = RRect.center;
   auto NewSrcImgSize = NfSrc.size();
   NewSrcImgSize.width -= int(NewSize.width * 0.35);
   RRectCenter.x += NewSize.width * 0.15;
-  NewSize.width *= 0.65;
+  NewSize.width *= 0.68;
 
   cv::warpAffine(NfSrc, NfWrapped, M, NewSrcImgSize);
   cv::getRectSubPix(NfWrapped, NewSize, RRectCenter, NfCropped);
@@ -141,7 +148,9 @@ void processImg()
 //
 //  cv::blur(Estratetraenol, Androstadienone, cv::Size(1, 1));
 //
-  cv::subtract(FCropped, NfCropped, Monozygotic);
+  cv::subtract(NfCropped, FCropped, Monozygotic);
+  cv::blur(Monozygotic, DendriticAborization, cv::Size(16, 16));
+  cv::inRange(DendriticAborization, cv::Scalar(2,2,2), cv::Scalar(255,255,255), Androstadienone);
 
-  cv::imwrite("test.jpg", Monozygotic);
+  cv::imwrite("test.jpg", NfCropped);
 }
